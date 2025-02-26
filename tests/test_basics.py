@@ -12,10 +12,9 @@ from dna_features_viewer import (
     annotate_biopython_record,
     load_record,
 )
-from bokeh.resources import CDN
-from bokeh.embed import file_html
 from Bio import SeqIO
 import numpy as np
+import pytest
 
 matplotlib.use("Agg")
 
@@ -114,6 +113,9 @@ def test_plot_with_gc_content(tmpdir):
 
 
 def test_plot_with_bokeh(tmpdir):
+    pytest.importorskip('bokeh', reason='require bokeh module')
+    from bokeh.resources import CDN
+    from bokeh.embed import file_html
     gb_record = SeqIO.read(example_genbank, "genbank")
     record = BiopythonTranslator().translate_record(record=gb_record)
     plot = record.plot_with_bokeh(figure_width=8)
@@ -126,6 +128,9 @@ def test_plot_with_bokeh(tmpdir):
 
 def test_plot_with_bokeh_no_labels(tmpdir):
     """Bokeh has a problem with empty lists of labels."""
+    pytest.importorskip('bokeh', reason='require bokeh module')
+    from bokeh.resources import CDN
+    from bokeh.embed import file_html
     gb_record = SeqIO.read(example_genbank, "genbank")
     record = BiopythonTranslator().translate_record(record=gb_record)
     for feature in record.features:
