@@ -244,6 +244,7 @@ def test_BlackBoxlessLabelTranslator(tmpdir):
 
 
 def test_gff():
+    pytest.importorskip('bcbio-gff', reason='require bcbio-gff module')
     translator = BlackBoxlessLabelTranslator()
     graphic_record = translator.translate_record(example_gff)
     assert len(graphic_record.features) == 3
