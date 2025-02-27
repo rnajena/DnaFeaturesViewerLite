@@ -1,8 +1,11 @@
 """Basic tests to check that the main examples work."""
 
+from contextlib import contextmanager
 import os
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
+import pytest
 from dna_features_viewer import (
     BiopythonTranslator,
     BlackBoxlessLabelTranslator,
@@ -12,11 +15,23 @@ from dna_features_viewer import (
     annotate_biopython_record,
     load_record,
 )
-from Bio import SeqIO
-import numpy as np
-import pytest
+
+try:
+    from Bio import SeqIO
+except ImportError:
+    pass
 
 matplotlib.use("Agg")
+
+
+@contextmanager
+def requirebio():
+    """Context manager which either runs code or checks that the correct error message is raised"""
+    try:
+        yield
+    except ImportError as ex:
+        assert ex.msg.startswith('Please install the Bio')
+
 
 example_genbank = os.path.join("tests", "data", "example_sequence.gb")
 example_gff = os.path.join("tests", "data", "example_record.gff")
@@ -55,34 +70,37 @@ def test_by_hand(tmpdir):
 
 
 def test_from_genbank(tmpdir):
-    graphic_record = BiopythonTranslator().translate_record(example_genbank)
-    assert len(graphic_record.features) == 11
-    ax, _ = graphic_record.plot(figure_width=10)
-    ax.figure.tight_layout()
-    target_file = os.path.join(str(tmpdir), "from_genbank.png")
-    ax.figure.savefig(target_file)
+    with requirebio():
+        graphic_record = BiopythonTranslator().translate_record(example_genbank)
+        assert len(graphic_record.features) == 11
+        ax, _ = graphic_record.plot(figure_width=10)
+        ax.figure.tight_layout()
+        target_file = os.path.join(str(tmpdir), "from_genbank.png")
+        ax.figure.savefig(target_file)
 
 
 def test_from_record(tmpdir):
-    record = load_record(example_genbank)
-    annotate_biopython_record(record, label="bla", color="blue")
-    graphic_record = BiopythonTranslator().translate_record(record)
-    assert len(graphic_record.features) == 12
+    with requirebio():
+        record = load_record(example_genbank)
+        annotate_biopython_record(record, label="bla", color="blue")
+        graphic_record = BiopythonTranslator().translate_record(record)
+        assert len(graphic_record.features) == 12
 
 
 def test_from_genbank_to_circular(tmpdir):
-    translator = BiopythonTranslator()
-    graphic_record = translator.translate_record(
-        example_genbank, record_class=CircularGraphicRecord
-    )
-    ax, _ = graphic_record.plot(figure_width=7)
-    ax.figure.tight_layout()
-    target_file = os.path.join(str(tmpdir), "from_genbank.png")
-    ax.figure.savefig(target_file)
+    with requirebio():
+        translator = BiopythonTranslator()
+        graphic_record = translator.translate_record(
+            example_genbank, record_class=CircularGraphicRecord
+        )
+        ax, _ = graphic_record.plot(figure_width=7)
+        ax.figure.tight_layout()
+        target_file = os.path.join(str(tmpdir), "from_genbank.png")
+        ax.figure.savefig(target_file)
 
 
 def test_plot_with_gc_content(tmpdir):
-
+    pytest.importorskip('Bio')
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 4), sharex=True)
 
     # Parse the genbank file, plot annotations
@@ -113,7 +131,8 @@ def test_plot_with_gc_content(tmpdir):
 
 
 def test_plot_with_bokeh(tmpdir):
-    pytest.importorskip('bokeh', reason='require bokeh module')
+    pytest.importorskip('bokeh')
+    pytest.importorskip('Bio')
     from bokeh.resources import CDN
     from bokeh.embed import file_html
     gb_record = SeqIO.read(example_genbank, "genbank")
@@ -128,7 +147,8 @@ def test_plot_with_bokeh(tmpdir):
 
 def test_plot_with_bokeh_no_labels(tmpdir):
     """Bokeh has a problem with empty lists of labels."""
-    pytest.importorskip('bokeh', reason='require bokeh module')
+    pytest.importorskip('bokeh')
+    pytest.importorskip('Bio')
     from bokeh.resources import CDN
     from bokeh.embed import file_html
     gb_record = SeqIO.read(example_genbank, "genbank")
@@ -197,6 +217,7 @@ def test_cropping_on_the_edge():
 
 
 def test_to_biopython_record():
+    pytest.importorskip('Bio')
     record = GraphicRecord(
         sequence_length=50,
         features=[
@@ -216,6 +237,7 @@ def test_to_biopython_record():
 
 
 def test_sequence_and_translation_plotting():
+    pytest.importorskip('Bio')
     from dna_features_viewer import (
         GraphicFeature,
         GraphicRecord,
@@ -234,6 +256,7 @@ def test_sequence_and_translation_plotting():
 
 
 def test_BlackBoxlessLabelTranslator(tmpdir):
+    pytest.importorskip('Bio')
     translator = BlackBoxlessLabelTranslator()
     graphic_record = translator.translate_record(example_genbank)
     assert len(graphic_record.features) == 11
@@ -251,7 +274,7 @@ def test_gff():
 
 
 def test_multiline_plot():
-
+    pytest.importorskip('Bio')
     translator = BiopythonTranslator()
     graphic_record = translator.translate_record(example_genbank)
     subrecord = graphic_record.crop((1700, 2200))
@@ -262,6 +285,7 @@ def test_multiline_plot():
 
 
 def test_multipage_plot(tmpdir):
+    pytest.importorskip('Bio')
     translator = BiopythonTranslator()
     graphic_record = translator.translate_record(example_genbank)
     subrecord = graphic_record.crop((1800, 2750))
@@ -275,6 +299,7 @@ def test_multipage_plot(tmpdir):
 
 def test_multipage_plot_with_translation(tmpdir):
     # Github issue 61
+    pytest.importorskip('Bio')
     translator = BiopythonTranslator()
     graphic_record = translator.translate_record(example_genbank)
     subrecord = graphic_record.crop((1800, 2750))
@@ -293,6 +318,7 @@ def test_multipage_plot_with_translation(tmpdir):
 
 
 def test_legend():
+    pytest.importorskip('Bio')
     class CustomTranslator(BiopythonTranslator):
         def compute_feature_legend_text(self, feature):
             return feature.type
