@@ -1,9 +1,17 @@
 import textwrap
-from Bio.Seq import Seq
-from Bio.SeqFeature import SeqFeature, FeatureLocation
-from Bio.PDB.Polypeptide import aa1, aa3
-from Bio import SeqIO
 
+try:
+    from Bio.Seq import Seq
+    from Bio.SeqFeature import SeqFeature, FeatureLocation
+    from Bio.PDB.Polypeptide import aa1, aa3
+    from Bio import SeqIO
+except ImportError:
+    class Seq:
+        def __init__(*a, **kw):
+            raise ImportError("Please install the Biopython library to use this functionality")
+    FeatureLocation = SeqIO = SeqFeature = Seq
+    SeqIO.read = SeqIO.__init__
+    aa1 = aa3 = None
 try:
     from BCBio import GFF
 except ImportError:
@@ -39,7 +47,7 @@ if type(aa1) is str and type(aa3) is list:
     aa_short_to_long_form_dict = {
         _aa1: _aa3[0] + _aa3[1:].lower() for (_aa1, _aa3) in zip(aa1 + "*", aa3 + ["*"])
     }
-else:
+elif aa1 is not None:
     # type is tuple
     # biopython 1.80 and later
     # See issue #73
