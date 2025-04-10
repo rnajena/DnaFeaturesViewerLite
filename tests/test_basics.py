@@ -54,6 +54,7 @@ def test_by_hand(tmpdir):
 
 
 def test_from_genbank(tmpdir):
+    pytest.importorskip('Bio')
     graphic_record = BiopythonTranslator().translate_record(example_genbank)
     assert len(graphic_record.features) == 11
     ax, _ = graphic_record.plot(figure_width=10)
@@ -63,6 +64,7 @@ def test_from_genbank(tmpdir):
 
 
 def test_from_record(tmpdir):
+    pytest.importorskip('Bio')
     record = load_record(example_genbank)
     annotate_biopython_record(record, label="bla", color="blue")
     graphic_record = BiopythonTranslator().translate_record(record)
@@ -70,6 +72,7 @@ def test_from_record(tmpdir):
 
 
 def test_from_genbank_to_circular(tmpdir):
+    pytest.importorskip('Bio')
     translator = BiopythonTranslator()
     graphic_record = translator.translate_record(
         example_genbank, record_class=CircularGraphicRecord
@@ -202,6 +205,7 @@ def test_cropping_on_the_edge():
 
 
 def test_to_biopython_record():
+    pytest.importorskip('Bio')
     record = GraphicRecord(
         sequence_length=50,
         features=[
@@ -239,6 +243,7 @@ def test_sequence_and_translation_plotting():
 
 
 def test_BlackBoxlessLabelTranslator(tmpdir):
+    pytest.importorskip('Bio')
     translator = BlackBoxlessLabelTranslator()
     graphic_record = translator.translate_record(example_genbank)
     assert len(graphic_record.features) == 11
@@ -256,7 +261,7 @@ def test_gff():
 
 
 def test_multiline_plot():
-
+    pytest.importorskip('Bio')
     translator = BiopythonTranslator()
     graphic_record = translator.translate_record(example_genbank)
     subrecord = graphic_record.crop((1700, 2200))
@@ -267,6 +272,7 @@ def test_multiline_plot():
 
 
 def test_multipage_plot(tmpdir):
+    pytest.importorskip('Bio')
     translator = BiopythonTranslator()
     graphic_record = translator.translate_record(example_genbank)
     subrecord = graphic_record.crop((1800, 2750))
@@ -279,6 +285,7 @@ def test_multipage_plot(tmpdir):
 
 
 def test_multipage_plot_with_translation(tmpdir):
+    pytest.importorskip('Bio')
     # Github issue 61
     translator = BiopythonTranslator()
     graphic_record = translator.translate_record(example_genbank)
@@ -298,6 +305,7 @@ def test_multipage_plot_with_translation(tmpdir):
 
 
 def test_legend():
+    pytest.importorskip('Bio')
     class CustomTranslator(BiopythonTranslator):
         def compute_feature_legend_text(self, feature):
             return feature.type
