@@ -12,7 +12,6 @@ from dna_features_viewer import (
     annotate_biopython_record,
     load_record,
 )
-from Bio import SeqIO
 import numpy as np
 import pytest
 
@@ -82,6 +81,8 @@ def test_from_genbank_to_circular(tmpdir):
 
 
 def test_plot_with_gc_content(tmpdir):
+    pytest.importorskip('Bio')
+    from Bio import SeqIO
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 4), sharex=True)
 
@@ -114,6 +115,8 @@ def test_plot_with_gc_content(tmpdir):
 
 def test_plot_with_bokeh(tmpdir):
     pytest.importorskip('bokeh', reason='require bokeh module')
+    pytest.importorskip('Bio')
+    from Bio import SeqIO
     from bokeh.resources import CDN
     from bokeh.embed import file_html
     gb_record = SeqIO.read(example_genbank, "genbank")
@@ -129,6 +132,8 @@ def test_plot_with_bokeh(tmpdir):
 def test_plot_with_bokeh_no_labels(tmpdir):
     """Bokeh has a problem with empty lists of labels."""
     pytest.importorskip('bokeh', reason='require bokeh module')
+    pytest.importorskip('Bio')
+    from Bio import SeqIO
     from bokeh.resources import CDN
     from bokeh.embed import file_html
     gb_record = SeqIO.read(example_genbank, "genbank")
