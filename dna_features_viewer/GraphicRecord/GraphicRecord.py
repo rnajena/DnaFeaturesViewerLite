@@ -1,19 +1,6 @@
 # -*- coding: utf-8 -*-
 from ..biotools import find_narrowest_text_wrap
 
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqFeature import FeatureLocation, SeqFeature
-
-try:
-    # Biopython <1.78
-    from Bio.Alphabet import DNAAlphabet
-
-    has_dna_alphabet = True
-except ImportError:
-    # Biopython >=1.78
-    has_dna_alphabet = False
-
 from .MatplotlibPlottableMixin import MatplotlibPlottableMixin
 from .BokehPlottableMixin import BokehPlottableMixin
 
@@ -124,6 +111,19 @@ class GraphicRecord(MatplotlibPlottableMixin, BokehPlottableMixin):
         >>> with open("example.gb", "w+") as f:
         >>>     SeqIO.write(record, f, "genbank")
         """
+        from Bio.Seq import Seq
+        from Bio.SeqRecord import SeqRecord
+        from Bio.SeqFeature import FeatureLocation, SeqFeature
+
+        try:
+            # Biopython <1.78
+            from Bio.Alphabet import DNAAlphabet
+
+            has_dna_alphabet = True
+        except ImportError:
+            # Biopython >=1.78
+            has_dna_alphabet = False
+
         features = [
             SeqFeature(
                 FeatureLocation(f.start, f.end, f.strand),
