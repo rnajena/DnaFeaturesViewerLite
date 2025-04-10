@@ -1,12 +1,12 @@
 [project]
-name = "dna_features_viewer"
+name = "dna_features_viewer_lite"
 version = "3.1.5"
 license = "MIT"
 authors = [{ name = "Zulko" }]
 description = "Plot features from DNA sequences (e.g. Genbank) with Python"
 readme = "pypi-readme.rst"
 keywords = ["DNA", "Sequence", "Feature", "Genbank", "Biopython", "Matplotlib"]
-dependencies = ["matplotlib>=3", "Biopython", "packaging"]
+dependencies = ["matplotlib>=3", "packaging"]
 
 [project.urls]
 Homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaFeaturesViewer"
