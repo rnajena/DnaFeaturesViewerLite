@@ -1,7 +1,6 @@
 import textwrap
 from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
-from Bio.PDB.Polypeptide import aa1, aa3
 from Bio import SeqIO
 
 try:
@@ -34,19 +33,11 @@ def reverse_complement(sequence):
     return complement(sequence)[::-1]
 
 
-if type(aa1) is str and type(aa3) is list:
-    # biopython before 1.80
-    aa_short_to_long_form_dict = {
-        _aa1: _aa3[0] + _aa3[1:].lower() for (_aa1, _aa3) in zip(aa1 + "*", aa3 + ["*"])
-    }
-else:
-    # type is tuple
-    # biopython 1.80 and later
-    # See issue #73
-    # relevant biopython commit: https://github.com/biopython/biopython/commit/257143be9196b77619d3d8cadc22039212681e08
-    aa_short_to_long_form_dict = {
-        _aa1: _aa3[0] + _aa3[1:].lower()
-        for (_aa1, _aa3) in zip(aa1 + ("*",), aa3 + ("*",))
+aa_short_to_long_form_dict = {
+    'A': 'Ala', 'C': 'Cys', 'D': 'Asp', 'E': 'Glu', 'F': 'Phe', 'G': 'Gly',
+    'H': 'His', 'I': 'Ile', 'K': 'Lys', 'L': 'Leu', 'M': 'Met', 'N': 'Asn',
+    'P': 'Pro', 'Q': 'Gln', 'R': 'Arg', 'S': 'Ser', 'T': 'Thr', 'V': 'Val',
+    'W': 'Trp', 'Y': 'Tyr', '*': '*'
     }
 
 
