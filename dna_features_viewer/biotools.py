@@ -1,6 +1,4 @@
 import textwrap
-from Bio.SeqFeature import SeqFeature, FeatureLocation
-from Bio import SeqIO
 
 try:
     from BCBio import GFF
@@ -121,6 +119,8 @@ def load_record(path, filetype=None):
     filetype
       Filetype; one of "genbank" or "gff". Default None infers from extension.
     """
+    from Bio import SeqIO
+
     if filetype is None:
         if isinstance(path, str):
             # Input is a file path
@@ -166,6 +166,8 @@ def annotate_biopython_record(
     qualifiers
       Dictionary that will be the Biopython feature's `qualifiers` attribute.
     """
+    from Bio.SeqFeature import SeqFeature, FeatureLocation
+
     if location == "full":
         location = (margin, len(seqrecord) - margin)
 
