@@ -1,3 +1,24 @@
+DNA Features Viewer Lite version
+================================
+
+In this repository code is added on top of the latest release of DNA Features Viewer
+to make it optionally work without BioPython.
+Some functionality still requires BioPython (or alternatively the sugar package).
+Install this package with
+
+::
+
+    pip install dna_features_viewer_lite
+
+and use it as a replacement for the original package.
+For the rationale behind the lite version, see the discussion here:
+
+https://github.com/Edinburgh-Genome-Foundry/DnaFeaturesViewer/pull/92
+
+| :warning: The lite version uses the same import name as the original package.
+| Please install only one of both packages.
+
+
 .. raw:: html
 
     <p align="center">
@@ -227,7 +248,7 @@ Since v3.0 it is possible to plot a sequence over multiple lines (using ``record
         plot_sequence=True
     )
 
-    
+
 .. raw:: html
 
     <p align="center">
