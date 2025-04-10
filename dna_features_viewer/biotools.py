@@ -1,5 +1,4 @@
 import textwrap
-from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqIO
 
@@ -13,6 +12,22 @@ except ImportError:
             raise ImportError("Please install the bcbio-gff library to parse GFF data")
 
 
+def _import_seq():
+    try:
+        from sugar import BioSeq as Seq
+    except ImportError:
+        pass
+    else:
+        return Seq
+    try:
+        from Bio.Seq import Seq
+    except ImportError:
+        pass
+    else:
+        return Seq
+    raise ImportError('This functionality needs either a sugar or biopython installation')
+
+
 def complement(dna_sequence):
     """Return the complement of the DNA sequence.
 
@@ -20,7 +35,7 @@ def complement(dna_sequence):
 
     Uses BioPython for speed.
     """
-    return str(Seq(dna_sequence).complement())
+    return str(_import_seq()(dna_sequence).complement())
 
 
 def reverse_complement(sequence):
@@ -47,7 +62,11 @@ def translate(dna_sequence, long_form=False):
     If long_form is true, a list of 3-letter amino acid representations
     is returned instead (['Ala', 'Ser', ...]).
     """
-    result = str(Seq(dna_sequence).translate())
+    Seq = _import_seq()
+    try:
+        result = str(Seq(dna_sequence).translate(complete=True))  # sugar
+    except:
+        result = str(Seq(dna_sequence).translate())  # BioPython
     if long_form:
         result = [aa_short_to_long_form_dict[aa] for aa in result]
     return result
