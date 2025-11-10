@@ -48,8 +48,10 @@ class MatplotlibPlottableMixin(MultilinePlottableMixin, SequenceAndTranslationMi
             ax.axis("off")
 
         ax.set_xlim(plot_start, plot_end)
-        if self.first_index != 0:
-            ax.ticklabel_format(useOffset=False, style="plain")
+        # Otherwise we get AttributeError: This method only works with the ScalarFormatter
+        # in matplotlib's function ticklabel_format
+        # if self.first_index != 0:
+        #     ax.ticklabel_format(useOffset=False, style="plain")
         fmt = lambda x, p: "{:,}".format(int(x))
         ax.xaxis.set_major_formatter(ticker.FuncFormatter(fmt))
         if self.ticks_resolution == "auto":
