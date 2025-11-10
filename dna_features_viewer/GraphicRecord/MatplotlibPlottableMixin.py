@@ -181,6 +181,7 @@ class MatplotlibPlottableMixin(MultilinePlottableMixin, SequenceAndTranslationMi
             zorder=0,
             edgecolor=feature.linecolor,
             linewidth=feature.linewidth,
+            clip_on=False,
         )
         ax.add_patch(patch)
         return patch
