@@ -1,9 +1,16 @@
 DNA Features Viewer Lite version
 ================================
 
-In this repository code is added on top of the latest release of DNA Features Viewer
-to make it optionally work without BioPython.
-Some functionality still requires BioPython (or alternatively the sugar package).
+This is a modified version of DNA Features Viewer that works without BioPython and has some improvements.
+
+It is intended as a lite version with fewer dependencies.
+Optional sequence manipulation (translation and reverse complement) still requires biological functionality.
+For this, the package can either rely on the ``sugar`` package or fall back to biopython.
+
+For plotting features, it is recommended to use sugar's
+`feature plotting capabilities <https://rnajena-sugar.readthedocs.io/en/latest/src/tutorial_imaging.html#plotting-features>`_,
+which rely on this package.
+
 Install this package with
 
 ::
@@ -11,6 +18,7 @@ Install this package with
     pip install dna_features_viewer_lite
 
 and use it as a replacement for the original package.
+Changes introduced in the lite version are listed in the ``CHANGELOG_lite`` file.
 For the rationale behind the lite version, see the discussion here:
 
 https://github.com/Edinburgh-Genome-Foundry/DnaFeaturesViewer/pull/92
