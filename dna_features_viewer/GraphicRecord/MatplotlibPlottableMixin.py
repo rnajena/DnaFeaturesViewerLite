@@ -173,6 +173,16 @@ class MatplotlibPlottableMixin(MultilinePlottableMixin, SequenceAndTranslationMi
             head_length=head_length,
         )
         y = self.feature_level_height * level
+        hatchkw = {}
+        if feature.hatch_linewidth is not None:
+            hatchkw['hatch_linewidth'] = feature.hatch_linewidth
+            # hatch_linewidth can only be used since matplotlib 3.10
+            # TODO remove after dropping support for older matplotlib versions
+            from matplotlib import __version__ as _mpl_version
+            if tuple(map(int, _mpl_version.split('.'))) < (3, 10, 0):
+                import warnings
+                warnings.warn('hatch_linewidth is ignored, it requires matplotlib 3.10 or higher')
+                hatchkw = {}
         patch = mpatches.FancyArrowPatch(
             [x1, y],
             [x2, y],
@@ -184,6 +194,8 @@ class MatplotlibPlottableMixin(MultilinePlottableMixin, SequenceAndTranslationMi
             edgecolor=feature.linecolor,
             linewidth=feature.linewidth,
             clip_on=False,
+            hatch=feature.hatch,
+            **hatchkw
         )
         ax.add_patch(patch)
         return patch

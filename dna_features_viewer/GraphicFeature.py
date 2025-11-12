@@ -73,6 +73,8 @@ class GraphicFeature:
         thickness=14,
         linewidth=1.0,
         linecolor="#000000",
+        hatch=None,
+        hatch_linewidth=None,
         fontdict=None,
         html=None,
         open_left=False,
@@ -89,6 +91,8 @@ class GraphicFeature:
         self.label = label
         self.color = color
         self.linecolor = linecolor
+        self.hatch = hatch
+        self.hatch_linewidth = hatch_linewidth
         self.data = data
         self.thickness = thickness
         self.linewidth = linewidth
