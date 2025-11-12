@@ -1,6 +1,6 @@
 [project]
 name = "dna_features_viewer_lite"
-version = "3.1.5"
+version = "3.1.5.1"
 license = "MIT"
 authors = [{ name = "Zulko" }]
 description = "Plot features from DNA sequences (e.g. Genbank) with Python"
