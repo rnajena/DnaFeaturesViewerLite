@@ -1,0 +1,14 @@
+Only changes on top of the original package are listed here.
+We use minor versions to stay compatible with the versioning of the original package.
+
+v3.1.5.1:
+  * allow to plot hatches with matplotlib backend
+  * fix clipped feature boxes for axes with small height
+  * fix AttributeError if first_index option is used
+v3.1.5:
+  * no changes
+v3.1.4:
+  * make biopython optional:
+    either sugar or biopython can be used for sequence manipulation tasks,
+    like translating the sequence to amino acids
+  * fix: only distribute main package (issue #94)
